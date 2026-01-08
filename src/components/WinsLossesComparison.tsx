@@ -43,14 +43,14 @@ export function WinsLossesComparison() {
   const winPct = totalWins + totalLosses > 0 ? (totalWins / (totalWins + totalLosses) * 100) : 0;
 
   return (
-    <div ref={ref} className="relative z-10 py-40 px-6">
+    <div ref={ref} className="relative z-10 py-6 md:py-16 lg:py-40 px-6">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
           viewport={{ once: true }}
-          className="mb-24"
+          className="mb-6 md:mb-12 lg:mb-24"
         >
           <h2 
             className="text-[clamp(4rem,12vw,9rem)] leading-none tracking-tight mb-6"

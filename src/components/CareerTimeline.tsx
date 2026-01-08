@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 import { Calendar, TrendingUp, Award, Target } from 'lucide-react';
 import twinsLogo from 'figma:asset/920a1daa8da50ac87f6cb37d73c57e60d4e3e18a.png';
 import { getAllJoeRyanSeasons, type JoeRyanStats } from '../utils/dataLoader';
+import { useIsMobile } from './ui/use-mobile';
 
 interface Milestone {
   year: string;
@@ -13,13 +14,15 @@ interface Milestone {
 }
 
 export function CareerTimeline() {
+  const isMobile = useIsMobile();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
   });
 
-  const timelineProgress = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
+  const timelineProgressTransform = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
+  const timelineProgress = isMobile ? 1 : timelineProgressTransform;
 
   const [milestones, setMilestones] = useState<Milestone[]>([]);
 
@@ -96,17 +99,17 @@ export function CareerTimeline() {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+          initial={isMobile ? false : { opacity: 0, y: 50 }}
+          whileInView={isMobile ? false : { opacity: 1, y: 0 }}
+          transition={isMobile ? {} : { duration: 1 }}
           viewport={{ once: true }}
           className="mb-12 text-center"
         >
           {/* Twins Logo */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            initial={isMobile ? false : { opacity: 0, scale: 0.8 }}
+            whileInView={isMobile ? false : { opacity: 1, scale: 1 }}
+            transition={isMobile ? {} : { duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
             className="mb-4 flex justify-center"
           >
@@ -146,9 +149,9 @@ export function CareerTimeline() {
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: isLeft ? -100 : 100 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  initial={isMobile ? false : { opacity: 0, x: isLeft ? -100 : 100 }}
+                  whileInView={isMobile ? false : { opacity: 1, x: 0 }}
+                  transition={isMobile ? {} : { duration: 0.8, delay: index * 0.1 }}
                   viewport={{ once: true }}
                   className="relative"
                 >
@@ -185,9 +188,9 @@ export function CareerTimeline() {
                     {/* Center dot with Twins colors */}
                     <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                       <motion.div
-                        initial={{ scale: 0 }}
-                        whileInView={{ scale: 1 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+                        initial={isMobile ? false : { scale: 0 }}
+                        whileInView={isMobile ? false : { scale: 1 }}
+                        transition={isMobile ? {} : { duration: 0.5, delay: index * 0.1 + 0.3 }}
                         viewport={{ once: true }}
                         className={`w-6 h-6 rounded-full bg-gradient-to-br ${milestone.color} shadow-2xl border-4 border-black`}
                       />

@@ -30,7 +30,7 @@ export function WARProgression() {
   }, []);
 
   return (
-    <div ref={ref} className="relative z-10 py-40 px-6">
+    <div ref={ref} className="relative z-10 py-6 md:py-16 lg:py-40 px-6">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}

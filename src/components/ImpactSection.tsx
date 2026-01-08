@@ -3,16 +3,20 @@ import { useRef, useEffect, useState } from 'react';
 import { AnimatedCounter } from './AnimatedCounter';
 import joeRyanPitching from 'figma:asset/d7cfd5130cb5c782229ccb19168ce8ff44798b37.png';
 import { getAllJoeRyanSeasons, type JoeRyanStats } from '../utils/dataLoader';
+import { useIsMobile } from './ui/use-mobile';
 
 export function ImpactSection() {
+  const isMobile = useIsMobile();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
   });
 
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
+  const scaleTransform = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
+  const rotateTransform = useTransform(scrollYProgress, [0, 1], [0, 360]);
+  const scale = isMobile ? 1 : scaleTransform;
+  const rotate = isMobile ? 0 : rotateTransform;
 
   const [strikeouts, setStrikeouts] = useState(0);
   const [kPer9, setKPer9] = useState(0);
@@ -41,7 +45,7 @@ export function ImpactSection() {
   }, []);
 
   return (
-    <div ref={ref} className="relative py-60 px-6 overflow-hidden">
+    <div ref={ref} className="relative py-6 md:py-24 lg:py-60 px-6 overflow-hidden">
       {/* Joe Ryan pitching image in background */}
       <div className="absolute inset-0">
         <img
@@ -70,9 +74,9 @@ export function ImpactSection() {
       >
         {/* Main feature number with 3D effect */}
         <motion.div
-          initial={{ opacity: 0, y: 80 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          initial={isMobile ? false : { opacity: 0, y: 80 }}
+          whileInView={isMobile ? false : { opacity: 1, y: 0 }}
+          transition={isMobile ? {} : { duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
           className="mb-32 text-center relative"
         >
@@ -101,9 +105,9 @@ export function ImpactSection() {
           </div>
           
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            initial={isMobile ? false : { opacity: 0, y: 20 }}
+            whileInView={isMobile ? false : { opacity: 1, y: 0 }}
+            transition={isMobile ? {} : { duration: 1, delay: 0.5 }}
             viewport={{ once: true }}
             className="mt-8"
           >
@@ -140,9 +144,9 @@ export function ImpactSection() {
           ].map((item, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 50, rotateX: -20 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
+              initial={isMobile ? false : { opacity: 0, y: 50, rotateX: -20 }}
+              whileInView={isMobile ? false : { opacity: 1, y: 0, rotateX: 0 }}
+              transition={isMobile ? {} : { duration: 0.8, delay: index * 0.2 }}
               viewport={{ once: true }}
               className="group hover-target cursor-pointer relative"
               style={{ perspective: '1000px' }}
@@ -172,9 +176,9 @@ export function ImpactSection() {
                   {/* Animated underline */}
                   <motion.div 
                     className={`h-1 bg-gradient-to-r ${item.gradient} rounded-full`}
-                    initial={{ width: 0 }}
-                    whileInView={{ width: '60%' }}
-                    transition={{ duration: 1, delay: index * 0.2 + 0.5 }}
+                    initial={isMobile ? false : { width: 0 }}
+                    whileInView={isMobile ? false : { width: '60%' }}
+                    transition={isMobile ? {} : { duration: 1, delay: index * 0.2 + 0.5 }}
                     viewport={{ once: true }}
                   />
                 </div>

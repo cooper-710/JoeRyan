@@ -2,15 +2,18 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, R
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef, useEffect, useState } from 'react';
 import { getAllJoeRyanSeasons, type JoeRyanStats } from '../utils/dataLoader';
+import { useIsMobile } from './ui/use-mobile';
 
 export function PerformanceCharts() {
+  const isMobile = useIsMobile();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const yTransform = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const y = isMobile ? 0 : yTransform;
 
   const [eraData, setEraData] = useState<Array<{year: string, era: number, league: number}>>([]);
   const [strikeoutData, setStrikeoutData] = useState<Array<{year: string, k: number, ip: number}>>([]);
@@ -47,15 +50,15 @@ export function PerformanceCharts() {
   }, []);
 
   return (
-    <div ref={ref} className="relative z-10 py-40 px-6">
+    <div ref={ref} className="relative z-10 py-6 md:py-16 lg:py-40 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+          initial={isMobile ? false : { opacity: 0, y: 50 }}
+          whileInView={isMobile ? false : { opacity: 1, y: 0 }}
+          transition={isMobile ? {} : { duration: 1 }}
           viewport={{ once: true }}
-          className="mb-24"
+          className="mb-6 md:mb-12 lg:mb-24"
         >
           <h2 
             className="text-[clamp(4rem,12vw,9rem)] leading-none tracking-tight mb-6"
@@ -75,9 +78,9 @@ export function PerformanceCharts() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* ERA Chart */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1 }}
+            initial={isMobile ? false : { opacity: 0, x: -50 }}
+            whileInView={isMobile ? false : { opacity: 1, x: 0 }}
+            transition={isMobile ? {} : { duration: 1 }}
             viewport={{ once: true }}
             className="group relative"
           >
@@ -155,9 +158,9 @@ export function PerformanceCharts() {
 
           {/* Strikeout Chart */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1 }}
+            initial={isMobile ? false : { opacity: 0, x: 50 }}
+            whileInView={isMobile ? false : { opacity: 1, x: 0 }}
+            transition={isMobile ? {} : { duration: 1 }}
             viewport={{ once: true }}
             className="group relative"
           >

@@ -2,8 +2,10 @@ import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef, useEffect, useState } from 'react';
 import { AnimatedCounter } from './AnimatedCounter';
 import { getLatestJoeRyanStats, type JoeRyanStats } from '../utils/dataLoader';
+import { useIsMobile } from './ui/use-mobile';
 
 export function StatsShowcase() {
+  const isMobile = useIsMobile();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -54,24 +56,24 @@ export function StatsShowcase() {
     });
   }, []);
 
+  const yOffsetTransform = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    [100, 0, -100]
+  );
+
   return (
-    <div ref={ref} className="relative z-10 py-40 px-6">
+    <div ref={ref} className="relative z-10 py-6 md:py-16 lg:py-40 px-6">
       <div className="max-w-[1600px] mx-auto">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {stats.map((stat, index) => {
-            const yOffset = useTransform(
-              scrollYProgress,
-              [0, 0.5, 1],
-              [100, 0, -100]
-            );
-
             return (
               <motion.div
                 key={index}
-                style={{ y: yOffset }}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
+                style={{ y: isMobile ? 0 : yOffsetTransform }}
+                initial={isMobile ? false : { opacity: 0 }}
+                whileInView={isMobile ? false : { opacity: 1 }}
+                transition={isMobile ? {} : { duration: 0.8, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 className="group hover-target cursor-pointer relative"
               >

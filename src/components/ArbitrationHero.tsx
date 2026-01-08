@@ -2,16 +2,20 @@ import { motion, useScroll, useTransform } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
 import { useRef } from 'react';
 import joeRyanPitching from 'figma:asset/d7cfd5130cb5c782229ccb19168ce8ff44798b37.png';
+import { useIsMobile } from './ui/use-mobile';
 
 export function ArbitrationHero() {
+  const isMobile = useIsMobile();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"]
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0]);
+  const yTransform = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacityTransform = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0]);
+  const y = isMobile ? "0%" : yTransform;
+  const opacity = isMobile ? 1 : opacityTransform;
 
   return (
     <div ref={ref} className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -32,9 +36,9 @@ export function ArbitrationHero() {
         <div className="flex-1 flex flex-col items-center justify-center max-w-7xl mx-auto pb-32 sm:pb-40">
           {/* Main title with Twins colors */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            initial={isMobile ? false : { opacity: 0, y: 40 }}
+            animate={isMobile ? false : { opacity: 1, y: 0 }}
+            transition={isMobile ? {} : { duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="mb-6 sm:mb-8 md:mb-12"
           >
             <h1 
@@ -55,9 +59,9 @@ export function ArbitrationHero() {
 
           {/* Subtitle with Twins branding */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.4 }}
+            initial={isMobile ? false : { opacity: 0 }}
+            animate={isMobile ? false : { opacity: 1 }}
+            transition={isMobile ? {} : { duration: 1, delay: 1.4 }}
             className="space-y-2"
           >
             <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-[#CFAB7A] tracking-[0.1em] sm:tracking-[0.15em] uppercase" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>
@@ -73,14 +77,14 @@ export function ArbitrationHero() {
 
         {/* Scroll indicator - Fixed at bottom */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2 }}
+          initial={isMobile ? false : { opacity: 0 }}
+          animate={isMobile ? false : { opacity: 1 }}
+          transition={isMobile ? {} : { duration: 1, delay: 2 }}
           className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2"
         >
           <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            animate={isMobile ? false : { y: [0, 12, 0] }}
+            transition={isMobile ? {} : { duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="flex flex-col items-center gap-2 sm:gap-3"
           >
             <span className="text-white/60 text-xs sm:text-sm tracking-[0.2em] sm:tracking-[0.3em] uppercase" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>Scroll</span>

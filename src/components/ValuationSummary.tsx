@@ -75,7 +75,7 @@ export function ValuationSummary() {
   }, []);
 
   return (
-    <div ref={ref} className="relative z-10 py-40 px-6">
+    <div ref={ref} className="relative z-10 py-6 md:py-16 lg:py-40 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -83,7 +83,7 @@ export function ValuationSummary() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
           viewport={{ once: true }}
-          className="mb-32"
+          className="mb-6 md:mb-12 lg:mb-32"
         >
           <h2 
             className="text-[clamp(4rem,12vw,9rem)] leading-none tracking-tight mb-6 text-white"
@@ -100,7 +100,7 @@ export function ValuationSummary() {
         {/* Main valuation card */}
         <motion.div 
           style={{ scale }}
-          className="flex justify-center mb-32"
+          className="flex justify-center mb-6 md:mb-12 lg:mb-32 px-4 md:px-0"
         >
           {/* Fair Value - Featured */}
           <motion.div
@@ -108,10 +108,10 @@ export function ValuationSummary() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="relative group"
+            className="relative group w-full max-w-2xl"
           >
             <div className="absolute -inset-2 bg-gradient-to-br from-[#D31145] via-[#CFAB7A] to-[#CFAB7A] rounded-3xl blur-3xl opacity-60 group-hover:opacity-80 transition-all duration-700 animate-pulse" />
-            <div className="relative h-full bg-black border-2 border-[#D31145]/50 rounded-3xl p-10 backdrop-blur-xl overflow-hidden">
+            <div className="relative h-full bg-black border-2 border-[#D31145]/50 rounded-3xl p-8 md:p-10 lg:p-12 backdrop-blur-xl overflow-hidden">
               {/* Shimmer effect */}
               <motion.div
                 className="absolute inset-0 opacity-20"
@@ -130,7 +130,7 @@ export function ValuationSummary() {
               
               <div className="relative z-10 flex items-center justify-center h-full">
                 <div 
-                  className="text-8xl tracking-tight text-[#CFAB7A]"
+                  className="text-5xl md:text-7xl lg:text-8xl tracking-tight text-[#CFAB7A]"
                   style={{
                     fontWeight: 900,
                     fontFamily: 'Georgia, serif'
@@ -149,16 +149,16 @@ export function ValuationSummary() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
           viewport={{ once: true }}
-          className="relative mb-32"
+          className="relative mb-6 md:mb-12 lg:mb-32"
         >
           <div className="absolute -inset-8 bg-gradient-to-br from-[#D31145]/5 via-[#CFAB7A]/5 to-[#CFAB7A]/5 rounded-3xl blur-3xl" />
           
-          <div className="relative bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 rounded-3xl p-12 backdrop-blur-2xl">
-            <h3 className="text-5xl text-white mb-16 tracking-tight font-bold">
+          <div className="relative bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 rounded-3xl p-8 md:p-10 lg:p-12 backdrop-blur-2xl">
+            <h3 className="text-3xl md:text-4xl lg:text-5xl text-white mb-8 md:mb-12 lg:mb-16 tracking-tight font-bold">
               Key Valuation Factors
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {factors.map((factor, index) => {
                 const Icon = factor.icon;
                 return (
