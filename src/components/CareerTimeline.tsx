@@ -53,7 +53,7 @@ export function CareerTimeline() {
         } else if (isCareerHighStrikeouts) {
           story = `Career-high ${Math.round(season.strikeouts)} strikeouts in ${season.innings.toFixed(1)} innings, showcasing his strikeout ability.`;
         } else if (isCareerLowERA) {
-          story = `Career-low ${season.era.toFixed(2)} ERA across ${season.gamesStarted} starts and ${season.innings.toFixed(1)} innings, his best season of his career to date.`;
+          story = `Career-low ${season.era.toFixed(2)} ERA across ${season.gamesStarted} starts and ${season.innings.toFixed(1)} innings.`;
         } else if (season.era < 3.5 && season.strikeouts > 150) {
           story = `${season.gamesStarted} starts, ${season.innings.toFixed(1)} innings. Established himself as a reliable rotation piece with strong strikeout numbers.`;
         } else if (season.era > 4.0 && season.innings > 150) {

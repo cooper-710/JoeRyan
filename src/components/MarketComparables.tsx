@@ -13,6 +13,7 @@ interface Comparable {
   whip: number;
   fip: number;
   war: number;
+  allStarAppearances: number;
   salary: string;
   highlight: boolean;
 }
@@ -26,6 +27,7 @@ interface SummaryRow {
   joeWhip: number;
   joeFip: number;
   joeWar: number;
+  joeAllStarAppearances: number;
   joeSalary: number;
   avgEra: number;
   avgWins: number;
@@ -34,6 +36,7 @@ interface SummaryRow {
   avgWhip: number;
   avgFip: number;
   avgWar: number;
+  avgAllStarAppearances: number;
   avgSalary: number;
 }
 
@@ -82,10 +85,25 @@ export function MarketComparables() {
           whip: joeStats.whip || 0,
           fip: joeStats.fip || 0,
           war: joeStats.war || 0,
+          allStarAppearances: 1,
           salary: joePrediction.predictedSalary || 'TBD',
           highlight: true
         });
       }
+      
+      // All-Star appearances mapping for 2025 comparables
+      const allStarMap: Record<string, number> = {
+        'george kirby': 1,
+        'kirby': 1,
+        'nick lodolo': 0,
+        'lodolo': 0,
+        'hunter brown': 1,
+        'brown': 1,
+        'trevor rogers': 1,
+        'rogers': 1,
+        'david peterson': 1,
+        'peterson': 1,
+      };
       
       // Add comparison players
       comps.forEach(comp => {
@@ -117,6 +135,16 @@ export function MarketComparables() {
             playerName = (parts[1]?.trim() || '') + ' ' + (parts[0]?.trim() || '');
           }
           
+          // Get All-Star appearances
+          const playerNameLower = playerName.trim().toLowerCase() || comp.player.toLowerCase();
+          let allStarAppearances = 0;
+          for (const [key, value] of Object.entries(allStarMap)) {
+            if (playerNameLower.includes(key)) {
+              allStarAppearances = value;
+              break;
+            }
+          }
+          
           compList.push({
             player: playerName.trim() || comp.player,
             team: team,
@@ -128,6 +156,7 @@ export function MarketComparables() {
             whip: comp.stats.whip || 0,
             fip: comp.stats.fip || 0,
             war: comp.stats.war || 0,
+            allStarAppearances: allStarAppearances,
             salary: comp.predictedSalary,
             highlight: false
           });
@@ -147,6 +176,7 @@ export function MarketComparables() {
         const avgWhip = comparablesOnly.reduce((sum, c) => sum + c.whip, 0) / comparablesOnly.length;
         const avgFip = comparablesOnly.reduce((sum, c) => sum + c.fip, 0) / comparablesOnly.length;
         const avgWar = comparablesOnly.reduce((sum, c) => sum + c.war, 0) / comparablesOnly.length;
+        const avgAllStarAppearances = comparablesOnly.reduce((sum, c) => sum + c.allStarAppearances, 0) / comparablesOnly.length;
         
         // Parse and average salaries (remove $ and commas, then convert to number)
         const salaryNumbers = comparablesOnly.map(c => {
@@ -170,6 +200,7 @@ export function MarketComparables() {
           joeWhip: joeStats.whip || 0,
           joeFip: joeStats.fip || 0,
           joeWar: joeStats.war || 0,
+          joeAllStarAppearances: 1,
           joeSalary: joeSalary,
           avgEra: avgEra,
           avgWins: avgWins,
@@ -178,6 +209,7 @@ export function MarketComparables() {
           avgWhip: avgWhip,
           avgFip: avgFip,
           avgWar: avgWar,
+          avgAllStarAppearances: avgAllStarAppearances,
           avgSalary: avgSalary,
         });
       }
@@ -254,6 +286,9 @@ export function MarketComparables() {
                     <th className="px-4 py-5 text-center">
                       <div className="text-xs text-white/40 uppercase tracking-[0.2em] font-medium">WAR</div>
                     </th>
+                    <th className="px-4 py-5 text-center">
+                      <div className="text-xs text-white/40 uppercase tracking-[0.2em] font-medium">All-Star</div>
+                    </th>
                     <th className="px-6 py-5 text-right">
                       <div className="text-xs text-white/40 uppercase tracking-[0.2em] font-medium">Projected Salary</div>
                     </th>
@@ -300,6 +335,9 @@ export function MarketComparables() {
                       <td className="px-4 py-6 text-center">
                         <span className="text-base text-yellow-400 font-semibold">{comp.war.toFixed(1)}</span>
                       </td>
+                      <td className="px-4 py-6 text-center">
+                        <span className="text-base text-pink-400 font-semibold">{comp.allStarAppearances}</span>
+                      </td>
                       <td className="px-6 py-6 text-right">
                         <span className={`text-base tracking-tight ${comp.highlight ? 'text-white font-bold' : 'text-white/70'}`}>
                           {comp.salary}
@@ -311,7 +349,7 @@ export function MarketComparables() {
                   {summary && (
                     <>
                       <tr className="border-t-2 border-white/20">
-                        <td colSpan={10} className="px-6 py-2 bg-white/[0.03]">
+                        <td colSpan={11} className="px-6 py-2 bg-white/[0.03]">
                           <div className="text-xs text-white/40 uppercase tracking-[0.2em] font-medium">
                             Summary Comparison
                           </div>
@@ -349,6 +387,9 @@ export function MarketComparables() {
                         </td>
                         <td className="px-4 py-5 text-center">
                           <span className="text-base text-yellow-400 font-semibold">{summary.avgWar.toFixed(1)}</span>
+                        </td>
+                        <td className="px-4 py-5 text-center">
+                          <span className="text-base text-pink-400 font-semibold">{summary.avgAllStarAppearances.toFixed(1)}</span>
                         </td>
                         <td className="px-6 py-5 text-right">
                           <span className="text-base tracking-tight text-white/70">
@@ -410,6 +451,12 @@ export function MarketComparables() {
                           <span className="text-base text-yellow-400 font-semibold">{summary.joeWar.toFixed(1)}</span>
                           <div className="text-xs text-white/40 mt-0.5">
                             {summary.joeWar > summary.avgWar ? '↑ Better' : summary.joeWar < summary.avgWar ? '↓ Worse' : '='}
+                          </div>
+                        </td>
+                        <td className="px-4 py-5 text-center">
+                          <span className="text-base text-pink-400 font-semibold">{summary.joeAllStarAppearances}</span>
+                          <div className="text-xs text-white/40 mt-0.5">
+                            {summary.joeAllStarAppearances > summary.avgAllStarAppearances ? '↑ Better' : summary.joeAllStarAppearances < summary.avgAllStarAppearances ? '↓ Worse' : '='}
                           </div>
                         </td>
                         <td className="px-6 py-5 text-right">

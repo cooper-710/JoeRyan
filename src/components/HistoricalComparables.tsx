@@ -20,6 +20,7 @@ interface Comparable {
   whip: number;
   fip: number;
   war: number;
+  allStarAppearances: number;
   salary: string;
   highlight: boolean;
 }
@@ -33,6 +34,7 @@ interface SummaryRow {
   joeWhip: number;
   joeFip: number;
   joeWar: number;
+  joeAllStarAppearances: number;
   joeSalary: number;
   avgEra: number;
   avgWins: number;
@@ -41,6 +43,7 @@ interface SummaryRow {
   avgWhip: number;
   avgFip: number;
   avgWar: number;
+  avgAllStarAppearances: number;
   avgSalary: number;
 }
 
@@ -59,7 +62,7 @@ export function HistoricalComparables() {
       setJoeStats(joeStats);
       
       // Find historical comparables
-      const historicalComps = await findHistoricalComparables(joeStats, 7);
+      const historicalComps = await findHistoricalComparables(joeStats, 6);
       
       const compList: Comparable[] = [];
       
@@ -91,10 +94,29 @@ export function HistoricalComparables() {
           whip: joeStats.whip || 0,
           fip: joeStats.fip || 0,
           war: joeStats.war || 0,
+          allStarAppearances: 1,
           salary: joePrediction.predictedSalary || 'TBD',
           highlight: true
         });
       }
+      
+      // All-Star appearances mapping
+      const allStarMap: Record<string, number> = {
+        'frankie montas': 0,
+        'montas': 0,
+        'lucas giolito': 1,
+        'giolito': 1,
+        'tyler mahle': 0,
+        'mahle': 0,
+        'jesus lúzardo': 0,
+        'luzardo': 0,
+        'kyle hendricks': 1,
+        'hendricks': 1,
+        'mike foltynewicz': 1,
+        'foltynewicz': 1,
+        'shane bieber': 1,
+        'bieber': 1,
+      };
       
       // Add historical comparison players
       historicalComps.forEach(comp => {
@@ -114,6 +136,16 @@ export function HistoricalComparables() {
           arbStatus = 'FA Eligible';
         }
         
+        // Get All-Star appearances
+        const playerNameLower = comp.player.toLowerCase();
+        let allStarAppearances = 0;
+        for (const [key, value] of Object.entries(allStarMap)) {
+          if (playerNameLower.includes(key)) {
+            allStarAppearances = value;
+            break;
+          }
+        }
+        
         compList.push({
           player: comp.player,
           club: comp.club,
@@ -126,6 +158,7 @@ export function HistoricalComparables() {
           whip: comp.whip,
           fip: comp.fip,
           war: comp.war,
+          allStarAppearances: allStarAppearances,
           salary: comp.salary,
           highlight: false
         });
@@ -144,6 +177,7 @@ export function HistoricalComparables() {
         const avgWhip = historicalOnly.reduce((sum, c) => sum + c.whip, 0) / historicalOnly.length;
         const avgFip = historicalOnly.reduce((sum, c) => sum + c.fip, 0) / historicalOnly.length;
         const avgWar = historicalOnly.reduce((sum, c) => sum + c.war, 0) / historicalOnly.length;
+        const avgAllStarAppearances = historicalOnly.reduce((sum, c) => sum + c.allStarAppearances, 0) / historicalOnly.length;
         
         // Parse and average salaries (remove $ and commas, then convert to number)
         const salaryNumbers = historicalOnly.map(c => {
@@ -167,6 +201,7 @@ export function HistoricalComparables() {
           joeWhip: joeStats.whip || 0,
           joeFip: joeStats.fip || 0,
           joeWar: joeStats.war || 0,
+          joeAllStarAppearances: 1,
           joeSalary: joeSalary,
           avgEra: avgEra,
           avgWins: avgWins,
@@ -175,6 +210,7 @@ export function HistoricalComparables() {
           avgWhip: avgWhip,
           avgFip: avgFip,
           avgWar: avgWar,
+          avgAllStarAppearances: avgAllStarAppearances,
           avgSalary: avgSalary,
         });
       }
@@ -256,6 +292,9 @@ export function HistoricalComparables() {
                     <th className="px-4 py-5 text-center">
                       <div className="text-xs text-white/40 uppercase tracking-[0.2em] font-medium">WAR</div>
                     </th>
+                    <th className="px-4 py-5 text-center">
+                      <div className="text-xs text-white/40 uppercase tracking-[0.2em] font-medium">All-Star</div>
+                    </th>
                     <th className="px-6 py-5 text-right">
                       <div className="text-xs text-white/40 uppercase tracking-[0.2em] font-medium">Actual Salary</div>
                     </th>
@@ -308,6 +347,9 @@ export function HistoricalComparables() {
                       <td className="px-4 py-6 text-center">
                         <span className="text-base text-yellow-400 font-semibold">{comp.war.toFixed(1)}</span>
                       </td>
+                      <td className="px-4 py-6 text-center">
+                        <span className="text-base text-pink-400 font-semibold">{comp.allStarAppearances}</span>
+                      </td>
                       <td className="px-6 py-6 text-right">
                         <span className={`text-base tracking-tight ${comp.highlight ? 'text-white font-bold' : 'text-white/70'}`}>
                           {comp.salary}
@@ -322,7 +364,7 @@ export function HistoricalComparables() {
                   {summary && (
                     <>
                       <tr className="border-t-2 border-white/20">
-                        <td colSpan={11} className="px-6 py-2 bg-white/[0.03]">
+                        <td colSpan={12} className="px-6 py-2 bg-white/[0.03]">
                           <div className="text-xs text-white/40 uppercase tracking-[0.2em] font-medium">
                             Summary Comparison
                           </div>
@@ -361,6 +403,9 @@ export function HistoricalComparables() {
                         </td>
                         <td className="px-4 py-5 text-center">
                           <span className="text-base text-yellow-400 font-semibold">{summary.avgWar.toFixed(1)}</span>
+                        </td>
+                        <td className="px-4 py-5 text-center">
+                          <span className="text-base text-pink-400 font-semibold">{summary.avgAllStarAppearances.toFixed(1)}</span>
                         </td>
                         <td className="px-6 py-5 text-right">
                           <span className="text-base tracking-tight text-white/70">
@@ -423,6 +468,12 @@ export function HistoricalComparables() {
                           <span className="text-base text-yellow-400 font-semibold">{summary.joeWar.toFixed(1)}</span>
                           <div className="text-xs text-white/40 mt-0.5">
                             {summary.joeWar > summary.avgWar ? '↑ Better' : summary.joeWar < summary.avgWar ? '↓ Worse' : '='}
+                          </div>
+                        </td>
+                        <td className="px-4 py-5 text-center">
+                          <span className="text-base text-pink-400 font-semibold">{summary.joeAllStarAppearances}</span>
+                          <div className="text-xs text-white/40 mt-0.5">
+                            {summary.joeAllStarAppearances > summary.avgAllStarAppearances ? '↑ Better' : summary.joeAllStarAppearances < summary.avgAllStarAppearances ? '↓ Worse' : '='}
                           </div>
                         </td>
                         <td className="px-6 py-5 text-right">
