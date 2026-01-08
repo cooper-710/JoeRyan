@@ -1,5 +1,6 @@
 import { ArbitrationHero } from './components/ArbitrationHero';
 import { MarketComparables } from './components/MarketComparables';
+import { HistoricalComparables } from './components/HistoricalComparables';
 import { PerformanceCharts } from './components/PerformanceCharts';
 import { ValuationSummary } from './components/ValuationSummary';
 import { VideoHero } from './components/VideoHero';
@@ -53,6 +54,7 @@ export default function App() {
       <RateStatsChart />
       <WinsLossesComparison />
       <MarketComparables />
+      <HistoricalComparables />
       <ValuationSummary />
     </div>
   );
